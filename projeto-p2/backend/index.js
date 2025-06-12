@@ -18,24 +18,22 @@ app.get('/weather', async (req, res) => {
   try {
     const apiKey = process.env.OWM_API_KEY;
     const response = await axios.get("https://api.openweathermap.org/data/2.5/forecast", {
-  params: {
-    q: city,
-    appid: process.env.API_KEY,
-    units: "metric", 
-    lang: "pt_br"
-  },
-});
+      params: {
+        q: city,
+        appid: apiKey,
+        units: "metric", 
+        lang: "pt_br"
+      },
+    });
 
-
-   const forecasts = response.data.list.map(f => ({
-  date: item.dt_txt,
-  temp_min: item.main.temp_min,
-  temp_max: item.main.temp_max,
-  humidity: item.main.humidity,
-  icon: item.weather[0].icon,
-  description: item.weather[0].description,
-}));
-
+    const forecasts = response.data.list.map(f => ({
+      date: f.dt_txt,
+      temp_min: f.main.temp_min,
+      temp_max: f.main.temp_max,
+      humidity: f.main.humidity,
+      icon: f.weather[0].icon,
+      description: f.weather[0].description,
+    }));
 
     res.json(forecasts);
   } catch (error) {

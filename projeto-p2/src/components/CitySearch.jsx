@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import api from "../services/api";
 
 export default function CitySearch({ onResults }) {
   const [city, setCity] = useState("São Paulo");
@@ -17,7 +18,7 @@ export default function CitySearch({ onResults }) {
       axios
         .get(`http://localhost:3001/weather?city=${encodeURIComponent(city)}`)
         .then((res) => {
-          console.log("📦 Dados recebidos do backend:", res.data); // 👈 AQUI
+          console.log("Dados recebidos do backend:", res.data); 
           onResults(res.data);
         })
         .catch((err) => {
