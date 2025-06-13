@@ -1,10 +1,8 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import api from "../services/api";
 
 export default function CitySearch({ onResults }) {
   const [city, setCity] = useState("São Paulo");
-  const timerRef = useRef(null);
 
   useEffect(() => {
     if (city.length < 3) {
@@ -12,13 +10,11 @@ export default function CitySearch({ onResults }) {
       return;
     }
 
-    if (timerRef.current) clearTimeout(timerRef.current);
-
-    timerRef.current = setTimeout(() => {
+    const delay = setTimeout(() => {
       axios
         .get(`http://localhost:3001/weather?city=${encodeURIComponent(city)}`)
         .then((res) => {
-          console.log("Dados recebidos do backend:", res.data); 
+          console.log("Dados recebidos do backend:", res.data);
           onResults(res.data);
         })
         .catch((err) => {
@@ -27,9 +23,7 @@ export default function CitySearch({ onResults }) {
         });
     }, 2000);
 
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-    };
+    return () => clearTimeout(delay); // Limpa o timeout antes de executar outro
   }, [city, onResults]);
 
   return (
